@@ -5,21 +5,35 @@ description: "UA (User Acquisition) performance analysis across mobile projects.
 
 # UA Agent — Instructions
 
-## Data Source
+## Data Source Configuration
 
-Each app/project has its own folder with a **`DATA_SOURCE.md`** file containing:
-- Google Sheet URL and sheet ID
-- Tab names with ready-to-use CSV read URLs
-- **`APP.md`** for app-specific context (store links, monetization, categories)
-- **`STRATEGY.md`** for the high-level roadmap and "Current Phase" context.
-- Local history file locations
+### Remote Repository Access
+The agent reads the **Git_Creds** file to retrieve the remote repository URL dynamically:
+- **Git_Creds Location**: `/mnt/project/Git_Creds`
+- **Format**: `Repo URL: https://github.com/[owner]/[repo]`
 
-**To find data for any project, read `DATA_SOURCE.md`, `APP.md`, and `STRATEGY.md`.**
+**Why**: The remote repo URL is not hardcoded. If you change the URL in Git_Creds, the agent automatically uses the new repository. This enables seamless migration between repos or remotes without modifying the skill.
+
+### Project Structure
+Each app/project has its own folder in the remote repo (`UA Agent/[AppName]/`) with:
+- **`DATA_SOURCE.md`** — Google Sheet URL, sheet ID, and CSV tab URLs
+- **`APP.md`** — App-specific context (store links, monetization, categories)
+- **`STRATEGY.md`** — High-level roadmap and "Current Phase" context
+- **`[Platform]/`** subdirectories (e.g., `Google Ads/`) containing:
+  - `CAMPAIGN_NOTES.md` — Campaign naming conventions and optimization context
+  - `Campaign Performance/history.csv` — Accumulated campaign data
+  - `Campaign Assets Performance/history.csv` — Asset-level performance
+  - `Campaign GEO Performance/history.csv` — Geographic performance data
+
+**To find data for any project**:
+1. Read `DATA_SOURCE.md`, `APP.md`, and `STRATEGY.md` from the remote repo
+2. Follow the CSV read URLs in `DATA_SOURCE.md` to access live Google Sheet data
+3. Reference the Google Sheet as the source of truth for all current data
 
 ### Mandatory Research Step
 Before performing any analysis, the agent **must**:
-1.  **Analyze App Store & Competitor Ads**: Use the links in `APP.md` to research the app's niche and competitors. Focus **purely on real, actual competitor ads currently running** (e.g., what headlines, creatives, ad copy they're actually using in Google Ads). Ignore theoretical/ASO strategies and only report verified, actionable intel on competitor UA tactics.
-2.  **Platform Research**: Use the platform name (inferred from the directory hierarchy: `[App Name]/[Platform Folder]/...`) to research latest confirmed trends and algo updates for that specific network (e.g., Google Ads UAC updates for 2026). Always verify against official platform documentation.
+1. **Analyze App Store & Competitor Ads**: Use the links in `APP.md` to research the app's niche and competitors. Focus **purely on real, actual competitor ads currently running** (e.g., what headlines, creatives, ad copy they're actually using in Google Ads). Ignore theoretical/ASO strategies and only report verified, actionable intel on competitor UA tactics.
+2. **Platform Research**: Use the platform name (inferred from the directory hierarchy: `[App Name]/[Platform Folder]/...`) to research latest confirmed trends and algo updates for that specific network (e.g., Google Ads UAC updates for 2026). Always verify against official platform documentation.
 
 ### Platform Inference
 The platform being analyzed is determined by the directory name containing the report files (e.g., if files are in `Habitoria/Google Ads/`, the platform is **Google Ads**).
@@ -52,11 +66,11 @@ The Google Sheet may only contain recent data (e.g., last 30-60 days). **History
 To preserve historical data AND maintain accuracy, the agent performs intelligent merging (not just append).
 
 ### Data flow
-1. Agent reads `DATA_SOURCE.md`, `APP.md`, and any source-level `CAMPAIGN_NOTES.md`.
-2. Agent fetches latest data from Google Sheet tabs.
-3. Agent merges new rows with existing `history.csv` (deduplicating by key columns).
-4. Agent saves updated `history.csv`.
-5. All analysis runs against the merged full history.
+1. Agent reads `DATA_SOURCE.md`, `APP.md`, and any source-level `CAMPAIGN_NOTES.md` from the remote repo
+2. Agent fetches latest data from Google Sheet tabs (via CSV URLs in `DATA_SOURCE.md`)
+3. Agent merges new rows with existing `history.csv` in remote repo (deduplicating by key columns)
+4. Agent commits updated `history.csv` back to remote repo
+5. All analysis runs against the merged full history
 
 ### Deduplication keys
 - **Campaign Performance**: `date` + `campaign_id`
@@ -77,32 +91,36 @@ The agent must verify each of the following mandatory points. Display as a clean
    - Extract app name from request
    - Example: "Habitoria" recognized from "analyze Habitoria"
 
-2. **✅ Project Folder Located**
-   - Confirm location of [AppName] project folder (or ask user to provide it)
-   - Example: "Habitoria folder found / User will provide path"
+2. **✅ Remote Repository Accessible**
+   - Confirm Git_Creds file is readable and contains a valid remote repo URL
+   - Example: "✅ Git_Creds found: https://github.com/GresskiyK/Claude-Repo"
 
-3. **✅ DATA_SOURCE.md Accessible**
+3. **✅ Project Folder Located in Remote Repo**
+   - Confirm location of [AppName] project folder in the remote repository
+   - Example: "✅ Habitoria folder found at UA Agent/Habitoria"
+
+4. **✅ DATA_SOURCE.md Accessible**
    - Can read DATA_SOURCE.md with Google Sheet ID and tab names
    - Example: "✅ Found: Google Sheet ID 1wQgdYyeR-EPeD8..."
 
-4. **✅ Google Sheet Access Verified**
+5. **✅ Google Sheet Access Verified**
    - Confirm access to live Google Sheet (can fetch Campaign Performance, Assets Performance, GEO Performance tabs)
    - Example: "✅ Sheet accessible, 3 tabs readable"
 
-5. **✅ APP.md Available**
+6. **✅ APP.md Available**
    - Can access app metadata (store links, category, monetization type)
    - Example: "✅ APP.md found: Habit tracking, Android-focused"
 
-6. **✅ STRATEGY.md Available**
+7. **✅ STRATEGY.md Available**
    - Can read current phase, goals, and roadmap
    - Example: "✅ STRATEGY.md found: Phase 3 (Monetization Focus)"
 
-7. **✅ Competitor Research Ready**
+8. **✅ Competitor Research Ready**
    - App Store links accessible for competitor analysis
    - Example: "✅ Google Play Store link available: [habitoria-app-link]"
 
-8. **✅ Analysis History Checked**
-   - Searched for existing ANALYSIS_RESULTS.md
+9. **✅ Analysis History Checked**
+   - Searched for existing ANALYSIS_RESULTS.md in remote repo
    - Example: "⚠️ No previous analysis found — starting fresh" OR "✅ Previous analysis from Apr 15 found"
 
 ### Result Display:
@@ -113,7 +131,8 @@ After displaying all statuses, the agent **PAUSES AND WAITS** for user response:
 📋 ANALYSIS READINESS CHECKLIST — Habitoria
 
 ✅ App Identified: Habitoria
-✅ Project Folder: Located
+✅ Remote Repo: https://github.com/GresskiyK/Claude-Repo
+✅ Project Folder: UA Agent/Habitoria (in remote repo)
 ✅ DATA_SOURCE.md: Accessible
 ✅ Google Sheet: Verified (3 tabs, last updated Apr 17)
 ✅ APP.md: Found (Google Play link available)
@@ -134,26 +153,27 @@ After displaying all statuses, the agent **PAUSES AND WAITS** for user response:
 📋 ANALYSIS READINESS CHECKLIST — Bumpy
 
 ✅ App Identified: Bumpy
-❌ Project Folder: NOT FOUND
+❌ Remote Repo: Git_Creds not accessible or URL invalid
+❌ Project Folder: NOT FOUND in remote repo
 ❌ DATA_SOURCE.md: Inaccessible
-✅ APP.md: (pending folder)
-❌ STRATEGY.md: (pending folder)
+✅ APP.md: (pending folder access)
+❌ STRATEGY.md: (pending folder access)
 ❌ Competitor Data: Cannot verify
 ⚠️ Previous Analysis: N/A
 
 🔴 BLOCKED — 3 critical items missing
 
 ⏸️ AWAITING YOUR RESPONSE:
-   • Please provide: Project folder path
-   • Or: DATA_SOURCE.md Google Drive link
-   • Or: Google Sheet ID directly
+   • Please verify: Git_Creds file and remote repo URL
+   • Or: Confirm the [AppName] project folder exists in the remote repo
+   • Or: Provide the remote repo URL directly
 ```
 
 **Agent Behavior - Full Loop**:
 1. Display checklist with all statuses
 2. **PAUSE AND WAIT** for user response
 3. User provides: "fix [item]" with information
-4. **RE-VERIFY THE ENTIRE CHECKLIST** (recheck all 8 items)
+4. **RE-VERIFY THE ENTIRE CHECKLIST** (recheck all 9 items)
 5. Display updated checklist with new statuses
 6. **PAUSE AND WAIT** again
 7. Repeat steps 3-6 until ALL items are ✅
@@ -173,27 +193,29 @@ After displaying all statuses, the agent **PAUSES AND WAITS** for user response:
 📋 ANALYSIS READINESS CHECKLIST — Habitoria
 
 ✅ App Identified: Habitoria
-❌ PROJECT FOLDER: NOT FOUND
-❌ DATA_SOURCE.md: Inaccessible
-✅ APP.md: Pending folder access
-❌ STRATEGY.md: Pending folder access
+❌ Remote Repo: Git_Creds not found or invalid
+❌ Project Folder: PENDING (can't access without repo)
+❌ DATA_SOURCE.md: PENDING
+✅ APP.md: Pending repo access
+❌ STRATEGY.md: Pending repo access
 ❌ Competitor Data: Pending
 ⚠️ Previous Analysis: N/A
 
-🔴 BLOCKED — 3 critical items missing
+🔴 BLOCKED — 1 critical item missing
 
-⏸️ Please provide:
-   • Path to Habitoria project folder
-   • Or: DATA_SOURCE.md Google Drive link
-   • Or: Google Sheet ID
+⏸️ Please verify:
+   • Git_Creds file exists at /mnt/project/Git_Creds
+   • Remote repo URL is valid and accessible
 ```
 
-**User**: "fix folder D:\Claude-Repo\UA Agent\Habitoria"
+**User**: "fix repo - verified Git_Creds has https://github.com/GresskiyK/Claude-Repo"
 
 **I re-verify ALL items:**
 ```
-✅ Verifying app name...
-✅ Checking folder at D:\Claude-Repo\UA Agent\Habitoria...
+✅ Reading Git_Creds file...
+✅ Validating repo URL...
+✅ Accessing remote repo...
+✅ Checking for Habitoria project folder...
 ✅ Searching for DATA_SOURCE.md...
 ✅ Parsing Google Sheet ID from DATA_SOURCE.md...
 ✅ Testing Google Sheet access...
@@ -208,7 +230,8 @@ After displaying all statuses, the agent **PAUSES AND WAITS** for user response:
 📋 ANALYSIS READINESS CHECKLIST — Habitoria (RE-VERIFIED)
 
 ✅ App Identified: Habitoria
-✅ Project Folder: D:\Claude-Repo\UA Agent\Habitoria
+✅ Remote Repo: https://github.com/GresskiyK/Claude-Repo
+✅ Project Folder: UA Agent/Habitoria
 ✅ DATA_SOURCE.md: Accessible (Found)
 ✅ Google Sheet: Verified (1wQgdYyeR-EPeD8... - 3 tabs readable)
 ✅ APP.md: Found (Google Play: [habitoria-link])
@@ -235,16 +258,17 @@ The agent performs analysis **on-demand** when the user updates the data source.
 ### Dynamic App Lookup
 When a user requests analysis for an app (e.g., "analyze Bumpy"), the agent **MUST**:
 1. **Extract app name** from the user's request
-2. **Ask user for the folder path or Google Drive link** if not already stored in context (e.g., "Where is the Bumpy project folder?" or "Can you share the Bumpy DATA_SOURCE.md link?")
-3. Once located, proceed with **Pre-Analysis Checkpoint** and data fetch steps below
+2. **Read Git_Creds** to get the remote repo URL dynamically
+3. **Locate the [AppName] folder** in the remote repo (path: `UA Agent/[AppName]/`)
+4. Once located, proceed with **Analysis Readiness Checklist** and data fetch steps below
 
-**Note**: The project folder structure on local PC (`D:\Claude-Repo\UA Agent\[AppName]\`) may not be accessible due to device changes. Use Google Drive links from `DATA_SOURCE.md` as the source of truth for all data.
+**Note**: All project data is now stored in the remote repository (GitHub). The agent accesses files directly from the remote repo using the URL in Git_Creds, not from local PC paths. If you need to change the remote repo URL, simply update Git_Creds and the agent will use the new location automatically.
 
 ---
 
 ### Pre-Analysis Checkpoint: Review Previous Results
 **Before starting any analysis**, the agent **MUST**:
-1. Check if previous analysis results exist in the **[AppName] project folder** (look for `ANALYSIS_RESULTS.md`)
+1. Check if previous analysis results exist in the **remote [AppName] project folder** (look for `ANALYSIS_RESULTS.md`)
 2. If found, **read the previous analysis** and note:
    - When it was conducted (date)
    - Key findings from that time
@@ -263,7 +287,7 @@ When a user requests analysis for an app (e.g., "analyze Bumpy"), the agent **MU
 
 **Steps**:
 0. **Review Previous Analysis** ⚡: Follow the **"Pre-Analysis Checkpoint"** above. Check for existing `ANALYSIS_RESULTS.md` file and summarize what was found last time.
-1. **Data Prep** ⚡: Read `DATA_SOURCE.md`, `APP.md`, `STRATEGY.md`, any source-level `CAMPAIGN_NOTES.md`, and fetch + merge latest data from all Google Sheet tabs.
+1. **Data Prep** ⚡: Read `DATA_SOURCE.md`, `APP.md`, `STRATEGY.md`, any source-level `CAMPAIGN_NOTES.md` from remote repo, and fetch + merge latest data from all Google Sheet tabs.
 2. **The Platform Angle**: Separate analysis by **OS (iOS vs Android)**.
    - Compare spend distribution and CPI efficiency across platforms.
    - Note: Never aggregate iOS and Android metrics unless specifically asked.
@@ -280,7 +304,7 @@ When a user requests analysis for an app (e.g., "analyze Bumpy"), the agent **MU
 
 **Step 8: Save Analysis Results** 💾
 1. Create/overwrite the markdown file: `ANALYSIS_RESULTS.md` (same file each time)
-2. Save it to the **[AppName] project folder** (same level as `APP.md`, `DATA_SOURCE.md`, `STRATEGY.md`)
+2. Save it to the **[AppName] project folder in remote repo** (same level as `APP.md`, `DATA_SOURCE.md`, `STRATEGY.md`)
 3. **File should contain**:
    - Analysis date and data cutoff date
    - Executive summary (top metrics, current status)
@@ -288,7 +312,7 @@ When a user requests analysis for an app (e.g., "analyze Bumpy"), the agent **MU
    - Previous analysis summary (brief reference to last findings for continuity)
    - Top 3 actionable recommendations
    - Any anomalies or alerts
-4. Confirm save with user: "✅ Analysis results saved to `[AppName]/ANALYSIS_RESULTS.md` (updated)"
+4. Confirm save with user: "✅ Analysis results saved to remote repo: `UA Agent/[AppName]/ANALYSIS_RESULTS.md` (updated)"
 
 ---
 
@@ -296,7 +320,7 @@ When a user requests analysis for an app (e.g., "analyze Bumpy"), the agent **MU
 **Purpose**: Identify winning/fatigued creatives and format gaps.
 
 **Steps**:
-1. **Review Previous Analysis** ⚡: Check for existing `ANALYSIS_RESULTS.md` file and note what was found about asset performance last time.
+1. **Review Previous Analysis** ⚡: Check for existing `ANALYSIS_RESULTS.md` file in remote repo and note what was found about asset performance last time.
 2. **Asset Ranking**: Rank assets by CPI and ROAS (min 100 impressions).
 3. **Creative Fatigue**: Identify assets with declining CTR/CVR over 2+ consecutive weeks.
 4. **The Format Angle**: Analyze the **Format Mix** (Video vs Static vs HTML5).
@@ -308,14 +332,14 @@ When a user requests analysis for an app (e.g., "analyze Bumpy"), the agent **MU
    - Creative **Gaps** (e.g., "Performance is good, but you have no Static assets running").
 
 **Step 6: Save Analysis Results** 💾
-1. Create/overwrite the markdown file: `ANALYSIS_RESULTS.md`
+1. Create/overwrite the markdown file: `ANALYSIS_RESULTS.md` in remote repo
 2. Save it to the **[AppName] project folder**
 3. **File should contain**:
    - Asset rankings (best/worst performers)
    - Fatigue alerts
    - Format analysis and gaps
    - Recommendations (scale/pause/create)
-4. Confirm save with user: "✅ Creative analysis saved to `[AppName]/ANALYSIS_RESULTS.md` (updated)"
+4. Confirm save with user: "✅ Creative analysis saved to remote repo: `UA Agent/[AppName]/ANALYSIS_RESULTS.md` (updated)"
 
 ---
 
@@ -323,7 +347,7 @@ When a user requests analysis for an app (e.g., "analyze Bumpy"), the agent **MU
 **Purpose**: Optimize geographic budget allocation and identify scaling opportunities.
 
 **Steps**:
-1. **Review Previous Analysis** ⚡: Check for existing `ANALYSIS_RESULTS.md` file and note what GEO recommendations were made last time.
+1. **Review Previous Analysis** ⚡: Check for existing `ANALYSIS_RESULTS.md` in remote repo and note what GEO recommendations were made last time.
 2. **Efficiency Audit**: Rank countries by ROAS/CPI.
 3. **The "Share" Angle**: Calculate each country's **Share of Spend** vs **Share of Installs/Value**.
    - Identify countries getting "too much" budget for their efficiency.
@@ -331,14 +355,14 @@ When a user requests analysis for an app (e.g., "analyze Bumpy"), the agent **MU
 5. **Budget Reallocation**: Provide specific % suggestions for shifting budget from inefficient to efficient GEOs.
 
 **Step 6: Save Analysis Results** 💾
-1. Create/overwrite the markdown file: `ANALYSIS_RESULTS.md`
+1. Create/overwrite the markdown file: `ANALYSIS_RESULTS.md` in remote repo
 2. Save it to the **[AppName] project folder**
 3. **File should contain**:
    - Country rankings by efficiency
    - Budget allocation analysis
    - Scaling opportunities
    - Specific budget reallocation recommendations (with % shifts)
-4. Confirm save with user: "✅ GEO analysis saved to `[AppName]/ANALYSIS_RESULTS.md` (updated)"
+4. Confirm save with user: "✅ GEO analysis saved to remote repo: `UA Agent/[AppName]/ANALYSIS_RESULTS.md` (updated)"
 
 ---
 
@@ -347,7 +371,7 @@ When a user requests analysis for an app (e.g., "analyze Bumpy"), the agent **MU
 **Steps**: Combines all 3 routines above into a prioritized strategic document.
 
 **Final Step: Save Full Report** 💾
-1. Create/overwrite the markdown file: `ANALYSIS_RESULTS.md`
+1. Create/overwrite the markdown file: `ANALYSIS_RESULTS.md` in remote repo
 2. Save it to the **[AppName] project folder**
 3. **File should contain**:
    - Complete performance analysis (sections 2-7 from "performance analysis" above)
@@ -355,7 +379,7 @@ When a user requests analysis for an app (e.g., "analyze Bumpy"), the agent **MU
    - GEO analysis with budget allocation suggestions
    - Combined strategic roadmap (5-7 prioritized tasks)
    - Comparison with previous full report (what changed, what improved)
-4. Confirm save with user: "✅ Full report saved to `[AppName]/ANALYSIS_RESULTS.md` (updated)"
+4. Confirm save with user: "✅ Full report saved to remote repo: `UA Agent/[AppName]/ANALYSIS_RESULTS.md` (updated)"
 
 ---
 
