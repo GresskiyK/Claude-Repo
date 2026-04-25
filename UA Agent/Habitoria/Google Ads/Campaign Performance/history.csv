@@ -1,0 +1,9 @@
+Campaign,Campaign ID,Day,Campaign type,Campaign subtype,Campaign bid strategy type,Installations,Currency code,Cost,Impr.,CPM,Clicks,CTR,Avg. CPC,Cost / Install,Conv. rate (install),Conv. rate (in-app action),In-app actions,Cost / In-app action,Conv. value
+HB_AND_GA_US_xCPE_d7_26-04-10,23737546074,2026-04-10,App,Automated app promotion,Maximise Conversions,7,USD,41.32,"1,798",22.97,68,3.78%,0.61,5.90,10.29%,0.00%,0,0,0
+HB_AND_GA_US_xCPE_d7_26-04-10,23737546074,2026-04-11,App,Automated app promotion,Maximise Conversions,32,USD,35.42,"1,432",24.72,65,4.54%,0.55,1.11,49.23%,0.00%,0,0,0
+HB_AND_GA_US_xCPE_d7_26-04-10,23737546074,2026-04-12,App,Automated app promotion,Maximise Conversions,7,USD,42.46,"1,619",26.22,64,3.95%,0.66,6.07,10.94%,0.00%,0,0,0
+HB_AND_GA_US_xCPE_d7_26-04-10,23737546074,2026-04-13,App,Automated app promotion,Maximise Conversions,10,USD,37.08,"1,468",25.27,67,4.57%,0.55,3.71,14.93%,0.00%,0,0,0
+HB_AND_GA_US_xCPE_d7_26-04-10,23737546074,2026-04-14,App,Automated app promotion,Maximise Conversions,8,USD,38.75,"1,856",20.87,71,3.82%,0.55,4.84,11.27%,1.41%,1,38.75,8
+HB_AND_GA_US_xCPE_d7_26-04-10,23737546074,2026-04-15,App,Automated app promotion,Maximise Conversions,9,USD,36.41,"1,622",22.44,68,4.19%,0.54,4.05,13.24%,2.94%,2,18.21,16
+HB_AND_GA_US_xCPE_d7_26-04-10,23737546074,2026-04-16,App,Automated app promotion,Maximise Conversions,12,USD,34.95,"1,501",23.28,69,4.60%,0.51,2.91,17.39%,4.35%,3,11.65,24
+HB_AND_GA_US_xCPE_d7_26-04-10,23737546074,2026-04-17,App,Automated app promotion,Maximise Conversions,11,USD,39.24,"1,734",22.62,72,4.15%,0.55,3.57,15.28%,3.70%,2,19.62,18
