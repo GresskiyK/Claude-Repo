@@ -1,190 +1,169 @@
-# EU Organic Spike Analysis — Apr 20 - May 8, 2026
+# EU Sessions Spike Analysis - Habitoria
 
-**Status**: ⚠️ CRITICAL FINDING — Attribution misalignment, not pure organic
-**Data Source**: Amplitude (Start Session metric — engagement, not installs)
-**Analysis Date**: May 9, 2026
+**Date**: May 9, 2026  
+**Data Source**: Amplitude (Sessions = Daily Active Users opening app)  
+**Period**: Mar 10 - May 8, 2026
 
 ---
 
 ## Executive Summary
 
-Between Apr 20 - May 8, Amplitude shows a **+242.7% surge in EU market sessions** (from 0.2 to 0.5 daily average). However, detailed breakdowns reveal this is **NOT a viral or halo effect**, but likely represents:
+A significant spike in sessions appeared across multiple EU countries starting **May 1-3, 2026**. This represents engagement from **existing app users**, not new installs. **All EU countries moved from 0 to 1-6+ daily sessions simultaneously**, suggesting either:
 
-1. **Attribution gap**: US Google Ads campaign users in EU (via VPN/geo spillover) reporting as "organic" in Amplitude
-2. **Geo-targeting failure**: Phase 3 campaign (launched Apr 10 US) may have leaked to EU audiences
-3. **Timing lock**: Spike starts exactly Apr 20 (10 days after Phase 3 launch) — consistent with ~7-10 day install-to-engagement lag
-
----
-
-## Data Overview
-
-### Collection Period
-- **Baseline**: Mar 10 - Apr 19, 2026 (41 days)
-- **Spike Period**: Apr 20 - May 8, 2026 (19 days)
-- **Metric**: Amplitude "Start Session" (engagement/retention, NOT installs)
-- **Campaigns Active**:
-  - **US**: Phase 3 launched Apr 10 (HB_AND_GA_US_xCPE_d7_26-04-10)
-  - **EU**: None (no paid campaigns)
+1. **Halo Effect** — US paid campaign boosted app visibility/ASO, EU users dormant from Mar now activating
+2. **Attribution Gap** — EU paid campaign running undetected (mislabeled as organic)
+3. **Feature Launch** — In-app event/notification triggered global engagement on May 1
 
 ---
 
-## Findings by Region
+## Key Data Points
 
-### 1. US Market (Paid Campaign)
-```
-Baseline (Mar 10-Apr 19):  2,936 total | 71.6 sessions/day avg
-Spike (Apr 20-May 8):      1,000 total | 52.6 sessions/day avg
-Change:                     -26.5% ⬇️
-```
+### US Baseline (Control)
+| Period | Daily Avg | Trend |
+|--------|-----------|-------|
+| Mar 10-31 | ~71 sessions/day | Stable |
+| Apr 1-30 | ~68 sessions/day | Stable, slight decline late Apr |
+| May 1-8 | ~50 sessions/day | **Declining** (-26%) |
 
-**Interpretation**: US paid campaign is UNDERPERFORMING, not driving engagement spike. This contradicts the positive organic EU spike—if both were driven by the same campaign quality, US should be UP too.
+**Interpretation**: US engagement is **declining**, not increasing. Rules out viral/word-of-mouth from US users.
 
-### 2. EU Markets (Organic - No Paid Spend)
-```
-Baseline (Mar 10-Apr 19):  102 total  | 0.2 sessions/day avg
-Spike (Apr 20-May 8):      162 total  | 0.5 sessions/day avg
-Change:                     +242.7% ⬆️ (HIGHLY SIGNIFICANT)
-```
+---
 
-**Countries Spiking** (Apr 20-May 8 spike period):
-| Country | Spike Sessions | Baseline | Multiplier |
-|---------|---|---|---|
-| Germany | 30 | 1 | **30x** ⚠️ |
-| France | 20 | 1 | **20x** ⚠️ |
-| Spain | 17 | 1 | **17x** ⚠️ |
-| Italy | 15 | 1 | **15x** ⚠️ |
-| Poland | 40 | 56 | **0.7x** ⬇️ DROPPED |
-| Denmark | 8 | 4 | **2x** |
-| Greece | 3 | 1 | **3x** |
-| Belgium | 2 | 2 | **1x** (no change) |
-| Ireland | 2 | 2 | **1x** (no change) |
-| Netherlands | 2 | 11 | **0.2x** ⬇️ DROPPED |
-| UK | 3 | 17 | **0.2x** ⬇️ DROPPED |
-| Sweden | 1 | 5 | **0.2x** ⬇️ DROPPED |
+### EU Countries - New Engagement (May 1-8)
 
-### 3. Non-EU, Non-US Markets
+| Country | Mar-Apr Activity | May 1-8 Activity | Change |
+|---------|------------------|-----------------|--------|
+| **Germany** | 0/day | 4-6/day | **∞ (NEW)** |
+| **France** | 0/day | 3-4/day | **∞ (NEW)** |
+| **Spain** | 0/day | 2-4/day | **∞ (NEW)** |
+| **Italy** | 0/day | 2-3/day | **∞ (NEW)** |
+| **Poland** | 1-2/day | 4-5/day | **+200-300%** |
+| **Denmark** | 0/day | 1/day | **∞ (NEW)** |
+| **Czech Republic** | 0/day | 1-2/day | **∞ (NEW)** |
+| **Turkey** | 0/day | 1/day | **∞ (NEW)** |
+| **Netherlands** | 0-1/day | 1/day | **Slight increase** |
+| **United Kingdom** | 0-1/day | 0-2/day | **Slight increase** |
+
+**Critical Pattern**: Every major EU market went from **silent (0/day) to active (2-6/day) on the exact same dates** (May 1-3).
+
+---
+
+## Timeline Correlation
+
 ```
-Baseline:  319 total sessions
-Spike:     220 total sessions
-Change:    -31.0% ⬇️
+Mar 16:   Phase 1 launched (US, Google Ads, habit_toggle_today event)
+          └─ No EU activity detected
+
+Apr 10:   Phase 3 launched (US, Google Ads, subscription event)
+          └ Still: EU = 0 sessions/day
+
+Apr 25:   Phase 3 campaign paused
+          └ US sessions begin declining (~68 → 50/day)
+          └ EU remains silent
+
+May 1-3:  SPIKE EVENT 🔥
+          └ All EU countries suddenly show 1-6+ sessions/day
+          └ Timing: 6 days after Phase 3 pause, 46 days after Phase 1 launch
 ```
 
 ---
 
-## Analysis: Three Hypotheses
+## Root Cause Analysis
 
-### Hypothesis A: Pure Viral/Halo Effect ❌ REJECTED
-**Theory**: Phase 3 US campaign improved app visibility globally, users in EU discovered through ASO/organic.
+### Scenario A: Halo Effect (ASO Boost)
+**Mechanism**: Phase 1 campaign (Mar 16) improved app store ranking, EU users discovering app organically.  
+**Issue**: If true, why 46-day delay? Why synchronized spike across all EU on May 1-3?  
+**Probability**: 🟡 **Medium** (timing doesn't align)
 
-**Evidence Against**:
-- Poland had **highest EU baseline (56)** but **DROPPED to 40** in spike period
-- If viral, all EU countries should spike. Instead, only Western EU (Germany, France, Spain, Italy) spike
-- US engagement is DOWN -26.5%, not up. Halo effect would boost all markets together
-- **Conclusion**: Not a quality/visibility improvement story
+### Scenario B: Attribution Gap ⚠️ **HIGHEST RISK**
+**Mechanism**: EU paid campaign running but mislabeled as organic.  
+**Evidence**:
+- Synchronized activation across all EU markets (typical of paid scaling)
+- Zero activity through Apr 30, then immediate 2-6x increase May 1
+- Patterns match "campaign launch" not "organic discovery"
 
----
+**Action Required**:
+1. ✅ Check Google Ads account for undetected EU campaigns (geo-targeting leak?)
+2. ✅ Check Firebase Event reporting — are these actually from EU or mislabeled US?
+3. ✅ Check Singular (MMP) dashboard for attribution source of these sessions
 
-### Hypothesis B: Attribution Misalignment ✅ MOST LIKELY
-**Theory**: US Google Ads campaign users in EU (via VPN/geo-bypass or targeting misconfiguration) converted in Google Ads, but Amplitude sees them as "organic" because:
-- Google Ads reports conversion → Attribution event fires in Firebase
-- Same user opens app in Amplitude → Session fires with "direct" / "organic" attribution
-- Amplitude attribution model doesn't sync with Google Ads (MMP gap)
-
-**Evidence For**:
-- **Timing lock**: Spike starts Apr 20 (10 days after Phase 3 launch on Apr 10) — exactly matches install-to-engagement window
-- **Western EU concentration**: Germany, France, Spain, Italy = wealthier, VPN-using markets where English-language US app attracts users
-- **Poland drops**: Poland was highest EU baseline (56) but not tech-savvy for VPN/geo-bypass, so drops when US campaign doesn't target it specifically
-- **Other markets drop**: If this were halo, they'd be stable or up. Instead they drop -31%, suggesting those were actual US campaign leaks now plugged
-- **Google Ads geo-targeting issue**: Phase 3 campaign may have had loose geo-targeting allowing EU clicks
-
-**Supporting Context**:
-- Phase 3 was "Firebase Purchase + Start Trial" event
-- Low conversion (6.8%), meaning many users installing but not converting
-- If some of those were EU users via geo-spillover, they'd install → wait 7-10 days → session spike in Amplitude (no purchase yet, just engagement)
+### Scenario C: Feature Launch / Push Notification
+**Mechanism**: Something launched May 1 that triggered EU user re-engagement.  
+**Evidence**: All regions activate simultaneously  
+**Check**: App release notes for May 1, push notification logs, feature toggles
 
 ---
 
-### Hypothesis C: Legitimate Organic/Spillover (Unlikely)
-**Theory**: Real organic discovery + some ad spillover creating combined effect.
+## What This IS NOT
 
-**Evidence Against**:
-- No ASO or PR activity documented in Apr
-- Pattern too concentrated (only Western EU, only Apr 20 spike start)
-- US engagement DOWN contradicts spillover theory (both should benefit)
+❌ **Viral spread from US campaign** — US sessions declining, not correlated  
+❌ **New installs spike** — This is sessions from existing app users  
+❌ **Delayed install attribution** — Would show gradual increase, not synchronized spike  
 
 ---
 
-## Recommended Actions
+## Phase 4 Strategy Implications
 
-### Immediate (This Week)
-1. **Check Google Ads geo-targeting on Phase 3 campaign**
-   - Verify campaign location settings (USA only?)
-   - Check if Canada/Mexico leak exists (they may be rolling in as "organic")
-   - Review click-to-install ratio by country in Google Ads
+### IF Scenario B (Paid Running): 
+⚠️ **CRITICAL**: You may be burning budget on untracked EU campaigns.
+- **Action**: Immediately audit Google Ads geo-targeting
+- **Impact on Phase 4**: Dangerous to launch EU phase 4 if Phase 3 EU is already running unseen
 
-2. **Verify Singular/Firebase attribution**
-   - Export Phase 3 installs by country from Singular
-   - Cross-reference with Amplitude "organic" installs Apr 20-May 8
-   - Is Amplitude organic = Singular unattributed/organic, or are they seeing actual Google Ads users?
+### IF Scenario A (Halo/Organic):
+✅ **OPPORTUNITY**: Pre-warmed EU market ready for paid acquisition
+- **Action**: Test Phase 4 in Germany, France, Spain (lowest CAC likely)
+- **Timing**: Capitalize while organic momentum is high (May-June)
+- **Budget**: 30-40% of Phase 4 spend could test EU markets
 
-3. **Check Amplitude attribution settings**
-   - Does Amplitude receive Google Ads integration?
-   - Is initial_attribution set to "Organic" by default for unattributed users?
-
-### Medium-term (Phase 4 Planning)
-**DO NOT expand paid campaigns to EU yet** until you:
-- Clarify if EU spike is real organic (requires MMP audit)
-- Understand why US engagement is DOWN despite campaign running
-- Determine if Phase 3 campaign is leaking to EU and if that's driving the spike
-
-**If attribution is verified clean** (no US campaign leak):
-- EU organic represents PRE-WARMED market (users already aware)
-- Phase 4 should test EU paid campaigns
-- Expected CPI in Germany/France would be **lower than US** (~$1.50-2.00 vs current $2.95 US)
-- BUT wait until Phase 4 paywall event signal is proven (mid-May) before committing EU budget
+### IF Scenario C (Feature Launch):
+✅ **GOOD NEWS**: Feature proved engagement driver
+- **Action**: Document what launched & replicate in other regions
+- **Phase 4**: Use same feature/push timing to drive conversions
 
 ---
 
-## Data Quality Notes
+## Next Steps (48 Hours)
 
-### Metric: "Start Session" ≠ Installs
-- Baseline had **102 EU sessions** from Mar 10-Apr 19
-- These weren't installs; they were engagement sessions from previously-installed users
-- Spike (162 sessions) could be:
-  - New installs + engagement (most likely if attribute gap)
-  - Same installs, higher engagement (less likely — baseline was so low)
+### Priority 1: Audit (Now)
+- [ ] Google Ads: Check all campaigns for accidental EU spend (Mar-May)
+- [ ] Google Ads: Check geo-targeting settings on all active campaigns
+- [ ] Firebase: Verify event source of these sessions (should show campaign source if paid)
+- [ ] Singular: Compare Google Ads reporting vs Singular for EU activity
 
-### Attribution Lag
-- Install happens: Apr 10-18 (Phase 3 active)
-- First session fires: Apr 20-May 8 (10 day lag typical for habit app engagement)
-- This matches observed spike timing exactly
+### Priority 2: Clarify (By May 11)
+- [ ] App release notes: What launched May 1?
+- [ ] Push notification logs: Any global push sent May 1?
+- [ ] Amplitude: Filter to see if users are repeat sessions or new to app
 
----
-
-## Next Steps
-
-### Before May 15:
-- [ ] Export Phase 3 campaign geo-breakdown from Google Ads (installs + spend by country)
-- [ ] Cross-reference with Singular Firebase data
-- [ ] Audit Amplitude attribution source (how are "organic" users classified?)
-- [ ] Review app store optimization changes in Apr (ASO changes could explain some EU lift)
-
-### Recommendation for Phase 4:
-- **Keep US focus for now**: Don't allocate EU budget until you understand if spike is real organic or attribution gap
-- **Paywall event must succeed first** (May 16-29 validation period)
-- **EU test can start Jun 1** if: (1) paywall event validates, (2) attribution gap is resolved, (3) US Phase 4 shows profitability
+### Priority 3: Decide (By May 15)
+- [ ] If paid leak found: Pause, recalculate Phase 3 ROI
+- [ ] If organic confirmed: Design EU Phase 4 test strategy
+- [ ] If feature-driven: Plan Phase 4 to include that feature/push
 
 ---
 
-## Critical Questions for Kirill
+## Recommendation
 
-1. Did you receive any EU clicks or impressions on Phase 3 campaign in Google Ads dashboard?
-2. Are you seeing any unattributed/organic installs in Singular for Phase 3 timeframe?
-3. Did any ASO changes happen in Apr (keywords, description, screenshots)?
-4. Is Amplitude connected to Google Ads as a data source, or is it seeing "organic" by default?
-5. Can you run a Singular cohort analysis for "organic" installs Apr 20-May 8, segment by country?
+**Hold Phase 4 launch until Scenario B is ruled out.** 
+
+If you're unknowingly spending on EU, launching Phase 4 could result in:
+- Double-counting conversions (Phase 3 EU + Phase 4 EU simultaneously)
+- False ROAS calculations
+- Wasted budget on overlapping audiences
+
+**Once EU attribution is verified**, Phase 4 should allocate 20-30% to top EU markets (Germany, France, Spain) given this organic momentum.
 
 ---
 
-**Confidence Level**: **MEDIUM-HIGH** on attribution gap hypothesis. Needs MMP audit to confirm. 60% confident this is not pure viral, 70% confident there's attribution misalignment.
+## Questions for Clarification
 
+1. **Did you intentionally launch any EU campaigns between Apr 25-May 1?** (paused Phase 3, launched anything else?)
+2. **Any app releases/features on May 1?**
+3. **Access to Firebase raw data?** (Can you see campaign source of these sessions?)
+4. **Access to Google Ads account?** (Can you check all campaign geo-targeting settings?)
+
+---
+
+**Analysis by**: Claude UA Agent  
+**Status**: Pending verification of Scenario B  
+**Next Review**: May 11, 2026 (after audit)
